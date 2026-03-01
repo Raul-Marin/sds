@@ -1,0 +1,454 @@
+{
+  "$schema": "https://forgecore.dev/schemas/forgecore.v1.json",
+  "forgecoreVersion": "1.0.0",
+  "name": "sds",
+  "package": {
+    "displayName": "SDS - Design System",
+    "npmName": "sds",
+    "version": "0.0.0",
+    "license": "MIT",
+    "repoURL": "",
+    "homepage": "",
+    "author": "SDS Team"
+  },
+  "metadata": {
+    "framework": "react",
+    "language": "typescript",
+    "moduleFormat": "esm",
+    "monorepo": false,
+    "entryStrategy": "source",
+    "notes": [
+      "Design system con primitivos React (react-aria-components), tokens CSS --sds-* y --global-*, y estilos co-localizados (.css por componente).",
+      "Estructura: Design/Code tabs con componente TSX + CSS asociado."
+    ]
+  },
+  "preview": {
+    "mode": "esbuild",
+    "theme": "dark",
+    "background": "var(--sds-color-background-default-default)",
+    "viewport": {
+      "width": 1200,
+      "height": 800,
+      "deviceScaleFactor": 1
+    },
+    "behavior": {
+      "disableAnimations": false,
+      "preferReducedMotion": true,
+      "logEvents": true,
+      "captureConsole": true
+    }
+  },
+  "runtime": {
+    "react": {
+      "version": "18.x"
+    },
+    "bundler": {
+      "type": "esbuild",
+      "platform": "browser",
+      "jsx": "automatic",
+      "tsconfigPath": "tsconfig.json",
+      "define": {
+        "process.env.NODE_ENV": "\"production\""
+      }
+    },
+    "aliases": {
+      "primitives": "src/ui/primitives",
+      "compositions": "src/ui/compositions",
+      "icons": "src/ui/icons",
+      "layout": "src/ui/layout",
+      "utils": "src/ui/utils",
+      "hooks": "src/ui/hooks",
+      "data": "src/data"
+    },
+    "globalCss": [
+      "src/index.css",
+      "src/theme.css",
+      "src/reset.css",
+      "src/responsive.css"
+    ],
+    "theme": {
+      "strategy": "media",
+      "attribute": null,
+      "values": ["light", "dark"],
+      "default": "dark",
+      "applyTo": "documentElement"
+    },
+    "mount": {
+      "rootId": "forge-root",
+      "wrapper": {
+        "element": "div",
+        "props": {
+          "style": "min-height:100vh; padding:var(--sds-size-space-800); box-sizing:border-box;"
+        }
+      }
+    },
+    "portals": {
+      "enabled": true,
+      "rootId": "forge-portal-root",
+      "attachTo": "body",
+      "createIfMissing": true
+    },
+    "stubs": {
+      "icons": {
+        "library": "icons",
+        "enabled": true,
+        "strategy": "component",
+        "fallback": "span"
+      }
+    }
+  },
+  "utilities": {
+    "cn": {
+      "path": "src/ui/utils/cn.ts",
+      "export": { "type": "named", "name": "cn" },
+      "stub": "function cn(){return Array.from(arguments).filter(Boolean).join(' ')}"
+    }
+  },
+  "tokens": {
+    "type": "css-variables",
+    "css": [
+      "src/index.css",
+      "src/theme.css"
+    ],
+    "categories": {
+      "colors": "--sds-color-",
+      "spacing": "--sds-size-space-",
+      "typography": "--sds-typography-",
+      "fonts": "--sds-font-",
+      "radius": "--sds-size-radius-",
+      "shadows": "--sds-effects-shadows-",
+      "zIndex": "--global-stack-",
+      "effects": "--sds-effects-"
+    }
+  },
+  "assets": {
+    "images": "public/images",
+    "fonts": "public/fonts",
+    "icons": {
+      "library": "icons",
+      "stub": true
+    }
+  },
+  "components": {
+    "Button": {
+      "entry": "src/ui/primitives/Button/Button.tsx",
+      "export": { "type": "named", "name": "Button" },
+      "styles": ["src/ui/primitives/Button/button.css"],
+      "dependencies": ["src/ui/utils/cn.ts"],
+      "type": "input",
+      "variants": [
+        { "prop": "variant", "values": ["primary", "neutral", "subtle", "danger-primary", "danger-subtle"], "default": "primary" },
+        { "prop": "size", "values": ["small", "medium", "large"], "default": "medium" }
+      ],
+      "defaultProps": {
+        "children": "Click me",
+        "variant": "primary",
+        "size": "medium"
+      },
+      "forge": {
+        "showcase": "<Button variant={props.variant} size={props.size}>{props.children}</Button>"
+      }
+    },
+    "ButtonDanger": {
+      "entry": "src/ui/primitives/Button/Button.tsx",
+      "export": { "type": "named", "name": "ButtonDanger" },
+      "styles": ["src/ui/primitives/Button/button.css"],
+      "dependencies": ["src/ui/utils/cn.ts"],
+      "type": "input",
+      "variants": [
+        { "prop": "variant", "values": ["danger-primary", "danger-subtle"], "default": "danger-primary" },
+        { "prop": "size", "values": ["small", "medium", "large"], "default": "medium" }
+      ],
+      "defaultProps": {
+        "children": "Delete",
+        "variant": "danger-primary",
+        "size": "medium"
+      }
+    },
+    "Dialog": {
+      "entry": "src/ui/primitives/Dialog/Dialog.tsx",
+      "export": { "type": "named", "name": "Dialog" },
+      "styles": ["src/ui/primitives/Dialog/dialog.css"],
+      "dependencies": ["src/ui/utils/cn.ts", "src/ui/primitives/Button/Button.tsx", "src/ui/primitives/IconButton/IconButton.tsx", "src/ui/primitives/Text/Text.tsx"],
+      "type": "overlay",
+      "variants": [
+        { "prop": "type", "values": ["card", "sheet"], "default": "card" }
+      ],
+      "defaultProps": {
+        "type": "card"
+      },
+      "forge": {
+        "requiresPortal": true,
+        "slots": {
+          "trigger": { "kind": "Button", "props": { "children": "Open dialog" } }
+        },
+        "showcase": "<DialogButton label='Open' variant='primary'><DialogTitle>Confirm Action</DialogTitle><DialogDescription>Are you sure you want to continue?</DialogDescription><DialogBody><ButtonGroup align='end'><Button variant='neutral'>Cancel</Button><Button variant='primary'>Confirm</Button></ButtonGroup></DialogBody></DialogButton>"
+      }
+    },
+    "IconButton": {
+      "entry": "src/ui/primitives/IconButton/IconButton.tsx",
+      "export": { "type": "named", "name": "IconButton" },
+      "styles": ["src/ui/primitives/IconButton/iconButton.css"],
+      "dependencies": ["src/ui/utils/cn.ts"],
+      "type": "input",
+      "variants": [
+        { "prop": "variant", "values": ["primary", "subtle", "neutral"], "default": "subtle" },
+        { "prop": "size", "values": ["small", "medium", "large"], "default": "medium" }
+      ],
+      "defaultProps": {
+        "aria-label": "Icon button",
+        "variant": "subtle",
+        "size": "medium"
+      }
+    },
+    "Input": {
+      "entry": "src/ui/primitives/Input/Input.tsx",
+      "export": { "type": "named", "name": "InputField" },
+      "styles": ["src/ui/primitives/Input/input.css"],
+      "dependencies": ["src/ui/utils/cn.ts"],
+      "type": "input",
+      "model": { "pattern": "controlledValue", "events": ["onChange"] },
+      "defaultProps": {
+        "label": "Label",
+        "placeholder": "Enter text..."
+      },
+      "forge": {
+        "showcase": "<div style={{width:'280px'}}><InputField label={props.label} placeholder={props.placeholder} /></div>"
+      }
+    },
+    "Select": {
+      "entry": "src/ui/primitives/Select/Select.tsx",
+      "export": { "type": "named", "name": "SelectField" },
+      "styles": ["src/ui/primitives/Select/select.css"],
+      "dependencies": ["src/ui/utils/cn.ts", "src/ui/primitives/ListBox/ListBox.tsx"],
+      "type": "input",
+      "model": { "pattern": "controlledValue", "events": ["onChange"] },
+      "defaultProps": {
+        "label": "Select",
+        "placeholder": "Choose an option",
+        "items": [{ "id": "1", "name": "Option 1" }, { "id": "2", "name": "Option 2" }, { "id": "3", "name": "Option 3" }]
+      },
+      "forge": {
+        "showcase": "<div style={{width:'280px'}}><SelectField label={props.label} placeholder={props.placeholder} items={props.items}>{(item)=>item.name}</SelectField></div>"
+      }
+    },
+    "Checkbox": {
+      "entry": "src/ui/primitives/Checkbox/Checkbox.tsx",
+      "export": { "type": "named", "name": "CheckboxField" },
+      "styles": ["src/ui/primitives/Checkbox/checkbox.css"],
+      "dependencies": ["src/ui/utils/cn.ts"],
+      "type": "input",
+      "model": { "pattern": "controlledValue", "events": ["onChange"] },
+      "defaultProps": {
+        "label": "Accept terms"
+      }
+    },
+    "Radio": {
+      "entry": "src/ui/primitives/Radio/Radio.tsx",
+      "export": { "type": "named", "name": "RadioGroup" },
+      "styles": ["src/ui/primitives/Radio/radio.css"],
+      "dependencies": ["src/ui/utils/cn.ts"],
+      "type": "input",
+      "model": { "pattern": "controlledValue", "events": ["onChange"] },
+      "defaultProps": {
+        "label": "Options",
+        "options": [{ "value": "a", "label": "Option A" }, { "value": "b", "label": "Option B" }]
+      }
+    },
+    "Switch": {
+      "entry": "src/ui/primitives/Switch/Switch.tsx",
+      "export": { "type": "named", "name": "SwitchField" },
+      "styles": ["src/ui/primitives/Switch/switch.css"],
+      "dependencies": ["src/ui/utils/cn.ts"],
+      "type": "input",
+      "model": { "pattern": "controlledValue", "events": ["onChange"] },
+      "defaultProps": {
+        "label": "Toggle",
+        "defaultSelected": false
+      }
+    },
+    "Textarea": {
+      "entry": "src/ui/primitives/Textarea/Textarea.tsx",
+      "export": { "type": "named", "name": "TextareaField" },
+      "styles": ["src/ui/primitives/Textarea/textarea.css"],
+      "dependencies": ["src/ui/utils/cn.ts"],
+      "type": "input",
+      "model": { "pattern": "controlledValue", "events": ["onChange"] },
+      "defaultProps": {
+        "label": "Description",
+        "placeholder": "Enter description..."
+      }
+    },
+    "Slider": {
+      "entry": "src/ui/primitives/Slider/Slider.tsx",
+      "export": { "type": "named", "name": "Slider" },
+      "styles": ["src/ui/primitives/Slider/slider.css"],
+      "dependencies": ["src/ui/utils/cn.ts"],
+      "type": "input",
+      "model": { "pattern": "controlledValue", "events": ["onChange"] },
+      "defaultProps": {
+        "label": "Volume",
+        "defaultValue": 50,
+        "minValue": 0,
+        "maxValue": 100
+      }
+    },
+    "Avatar": {
+      "entry": "src/ui/primitives/Avatar/Avatar.tsx",
+      "export": { "type": "named", "name": "Avatar" },
+      "styles": ["src/ui/primitives/Avatar/avatar.css"],
+      "dependencies": ["src/ui/utils/cn.ts"],
+      "type": "display",
+      "defaultProps": {
+        "name": "User",
+        "src": null
+      }
+    },
+    "Text": {
+      "entry": "src/ui/primitives/Text/Text.tsx",
+      "export": { "type": "named", "name": "Text" },
+      "styles": ["src/ui/primitives/Text/text.css"],
+      "dependencies": ["src/ui/utils/cn.ts"],
+      "type": "display",
+      "defaultProps": {
+        "children": "Text content"
+      }
+    },
+    "Tag": {
+      "entry": "src/ui/primitives/Tag/Tag.tsx",
+      "export": { "type": "named", "name": "Tag" },
+      "styles": ["src/ui/primitives/Tag/tag.css"],
+      "dependencies": ["src/ui/utils/cn.ts"],
+      "type": "display",
+      "defaultProps": {
+        "children": "Tag"
+      }
+    },
+    "Tooltip": {
+      "entry": "src/ui/primitives/Tooltip/Tooltip.tsx",
+      "export": { "type": "named", "name": "Tooltip" },
+      "styles": ["src/ui/primitives/Tooltip/tooltip.css"],
+      "dependencies": ["src/ui/utils/cn.ts", "src/ui/primitives/Dialog/Dialog.tsx", "src/ui/primitives/Button/Button.tsx"],
+      "type": "overlay",
+      "defaultProps": {
+        "children": "Helpful tooltip"
+      },
+      "preview": {
+        "forceVisible": true,
+        "disableAnimations": true
+      },
+      "forge": {
+        "showcase": "<DialogTrigger><Button variant='neutral'>Hover me</Button><Tooltip placement='top'>{props.children}</Tooltip></DialogTrigger>"
+      }
+    },
+    "Accordion": {
+      "entry": "src/ui/primitives/Accordion/Accordion.tsx",
+      "export": { "type": "named", "name": "Accordion" },
+      "styles": ["src/ui/primitives/Accordion/accordion.css"],
+      "dependencies": ["src/ui/utils/cn.ts"],
+      "type": "layout",
+      "defaultProps": {
+        "children": "Accordion content"
+      }
+    },
+    "Tab": {
+      "entry": "src/ui/primitives/Tab/Tab.tsx",
+      "export": { "type": "named", "name": "Tabs" },
+      "styles": ["src/ui/primitives/Tab/tab.css"],
+      "dependencies": ["src/ui/utils/cn.ts"],
+      "type": "navigation",
+      "model": { "pattern": "controlledValue", "events": ["onChange"] },
+      "defaultProps": {
+        "defaultSelectedKey": "tab1"
+      }
+    },
+    "ListBox": {
+      "entry": "src/ui/primitives/ListBox/ListBox.tsx",
+      "export": { "type": "named", "name": "ListBox" },
+      "styles": ["src/ui/primitives/ListBox/listBox.css"],
+      "dependencies": ["src/ui/utils/cn.ts"],
+      "type": "input",
+      "defaultProps": {
+        "items": [{ "id": "1", "name": "Item 1" }, { "id": "2", "name": "Item 2" }]
+      }
+    },
+    "Table": {
+      "entry": "src/ui/primitives/Table/Table.tsx",
+      "export": { "type": "named", "name": "Table" },
+      "styles": ["src/ui/primitives/Table/table.css"],
+      "dependencies": ["src/ui/utils/cn.ts"],
+      "type": "display",
+      "defaultProps": {}
+    },
+    "Notification": {
+      "entry": "src/ui/primitives/Notification/Notification.tsx",
+      "export": { "type": "named", "name": "Notification" },
+      "styles": ["src/ui/primitives/Notification/notification.css"],
+      "dependencies": ["src/ui/utils/cn.ts"],
+      "type": "feedback",
+      "defaultProps": {
+        "title": "Notification",
+        "description": "This is a notification message"
+      }
+    },
+    "Search": {
+      "entry": "src/ui/primitives/Search/Search.tsx",
+      "export": { "type": "named", "name": "SearchField" },
+      "styles": ["src/ui/primitives/Search/search.css"],
+      "dependencies": ["src/ui/utils/cn.ts"],
+      "type": "input",
+      "defaultProps": {
+        "placeholder": "Search...",
+        "label": "Search"
+      }
+    },
+    "Link": {
+      "entry": "src/ui/primitives/Link/Link.tsx",
+      "export": { "type": "named", "name": "Link" },
+      "styles": ["src/ui/primitives/Link/link.css"],
+      "dependencies": ["src/ui/utils/cn.ts"],
+      "type": "navigation",
+      "defaultProps": {
+        "children": "Link",
+        "href": "#"
+      }
+    },
+    "Pagination": {
+      "entry": "src/ui/primitives/Pagination/Pagination.tsx",
+      "export": { "type": "named", "name": "Pagination" },
+      "styles": ["src/ui/primitives/Pagination/pagination.css"],
+      "dependencies": ["src/ui/utils/cn.ts"],
+      "type": "navigation",
+      "defaultProps": {
+        "totalPages": 10,
+        "currentPage": 1
+      }
+    },
+    "Navigation": {
+      "entry": "src/ui/primitives/Navigation/Navigation.tsx",
+      "export": { "type": "named", "name": "Navigation" },
+      "styles": ["src/ui/primitives/Navigation/navigation.css"],
+      "dependencies": ["src/ui/utils/cn.ts"],
+      "type": "navigation",
+      "defaultProps": {}
+    },
+    "Menu": {
+      "entry": "src/ui/primitives/Menu/Menu.tsx",
+      "export": { "type": "named", "name": "Menu" },
+      "styles": ["src/ui/primitives/Menu/menu.css"],
+      "dependencies": ["src/ui/utils/cn.ts"],
+      "type": "overlay",
+      "defaultProps": {}
+    },
+    "Fieldset": {
+      "entry": "src/ui/primitives/Fieldset/Fieldset.tsx",
+      "export": { "type": "named", "name": "Fieldset" },
+      "styles": [],
+      "dependencies": ["src/ui/utils/cn.ts"],
+      "type": "layout",
+      "defaultProps": {
+        "legend": "Fieldset"
+      }
+    }
+  }
+}
